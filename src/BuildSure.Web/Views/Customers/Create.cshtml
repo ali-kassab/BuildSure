@@ -1,0 +1,21 @@
+@model Customer
+@{
+    ViewData["Title"] = "New customer";
+}
+
+<div class="page-header"><h1>New customer</h1></div>
+
+<div class="card"><div class="card-body">
+    @* asp-action builds the URL; the form tag helper also adds the hidden anti-forgery token. *@
+    <form asp-action="Create" method="post">
+        <partial name="_CustomerForm" model="Model" />
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Create customer</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div></div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

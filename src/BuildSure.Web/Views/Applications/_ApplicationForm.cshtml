@@ -1,0 +1,44 @@
+@model ApplicationFormViewModel
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+<div class="row g-3">
+    <div class="col-12">
+        <label asp-for="CustomerId" class="form-label"></label>
+        <select asp-for="CustomerId" asp-items="Model.Customers" class="form-select">
+            <option value="">-- Select a customer --</option>
+        </select>
+        <span asp-validation-for="CustomerId" class="text-danger small"></span>
+        @if (!Model.Customers.Any())
+        {
+            <div class="form-text">No customers yet. <a asp-controller="Customers" asp-action="Create">Create a customer first</a>.</div>
+        }
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ProjectName" class="form-label"></label>
+        <input asp-for="ProjectName" class="form-control" />
+        <span asp-validation-for="ProjectName" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ProjectAddress" class="form-label"></label>
+        <input asp-for="ProjectAddress" class="form-control" />
+        <span asp-validation-for="ProjectAddress" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="NumberOfFloors" class="form-label"></label>
+        <input asp-for="NumberOfFloors" class="form-control" />
+        <span asp-validation-for="NumberOfFloors" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ConstructionCost" class="form-label"></label>
+        <input asp-for="ConstructionCost" class="form-control" inputmode="decimal" />
+        <span asp-validation-for="ConstructionCost" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control" rows="3" maxlength="1000" data-counter="#notes-counter"></textarea>
+        <div class="d-flex justify-content-between">
+            <span asp-validation-for="Notes" class="text-danger small"></span>
+            <span id="notes-counter" class="form-text"></span>
+        </div>
+    </div>
+</div>

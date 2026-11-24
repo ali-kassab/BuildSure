@@ -1,0 +1,30 @@
+@model ApplicationListViewModel
+@{
+    ViewData["Title"] = "Applications";
+}
+
+<div class="page-header">
+    <h1>Insurance applications</h1>
+    <a asp-action="Create" class="btn btn-primary">New application</a>
+</div>
+
+@* A normal GET form: works without JavaScript. site.js intercepts it and reloads only the table via AJAX. *@
+<form asp-action="Index" method="get" id="application-filter" class="row g-2 mb-3">
+    <div class="col-sm-6 col-md-5">
+        <input type="search" name="search" value="@Model.Search" class="form-control"
+               placeholder="Search number, project or customer" autocomplete="off" />
+    </div>
+    <div class="col-sm-4 col-md-3">
+        @* asp-for="Status" makes the select tag helper mark the current status as selected. *@
+        <select asp-for="Status" name="status" asp-items="StatusStyles.StatusOptions()" class="form-select">
+            <option value="">All statuses</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-secondary">Filter</button>
+    </div>
+</form>
+
+<div id="application-results">
+    <partial name="_ApplicationTable" model="Model.Applications" />
+</div>

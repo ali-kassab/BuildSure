@@ -1,0 +1,65 @@
+@model IEnumerable<Customer>
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<div class="page-header">
+    <h1>Customers</h1>
+    <a asp-action="Create" class="btn btn-primary">New customer</a>
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-sm-8 col-md-6">
+        <input type="search" name="search" value="@ViewData["Search"]" class="form-control" placeholder="Search by name, National ID or email" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
+        @if (!string.IsNullOrEmpty(ViewData["Search"] as string))
+        {
+            <a asp-action="Index" class="btn btn-link">Clear</a>
+        }
+    </div>
+</form>
+
+<div class="card">
+    @if (!Model.Any())
+    {
+        <div class="card-body text-muted">No customers found.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.FullName)</th>
+                        <th>@Html.DisplayNameFor(m => m.NationalId)</th>
+                        <th>@Html.DisplayNameFor(m => m.PhoneNumber)</th>
+                        <th>@Html.DisplayNameFor(m => m.Email)</th>
+                        <th class="text-center">Applications</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td><a asp-action="Details" asp-route-id="@customer.Id">@customer.FullName</a></td>
+                            <td>@customer.NationalId</td>
+                            <td>@customer.PhoneNumber</td>
+                            <td>@customer.Email</td>
+                            <td class="text-center">@customer.Applications.Count</td>
+                            <td class="text-end text-nowrap">
+                                <a asp-action="Edit" asp-route-id="@customer.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@customer.Id" method="post" class="d-inline js-confirm"
+                                      data-confirm="Delete customer &quot;@customer.FullName&quot;? This cannot be undone.">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

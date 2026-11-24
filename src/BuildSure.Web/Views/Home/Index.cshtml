@@ -1,8 +1,83 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="page-header">
+    <div>
+        <h1>Dashboard</h1>
+        <div class="text-muted small" id="stats-updated">Construction insurance applications at a glance</div>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" id="refresh-stats" class="btn btn-outline-secondary" data-url="@Url.Action("Stats", "Home")">Refresh</button>
+        <a asp-controller="Applications" asp-action="Create" class="btn btn-primary">New application</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Applications" asp-action="Index" class="text-decoration-none text-reset">
+            <div class="card stat-card stat-total h-100"><div class="card-body">
+                <div class="stat-label">Total applications</div>
+                <div class="stat-value" data-stat="total">@Model.TotalApplications</div>
+            </div></div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Applications" asp-action="Index" asp-route-status="Pending" class="text-decoration-none text-reset">
+            <div class="card stat-card stat-pending h-100"><div class="card-body">
+                <div class="stat-label">Pending</div>
+                <div class="stat-value" data-stat="pending">@Model.PendingApplications</div>
+            </div></div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Applications" asp-action="Index" asp-route-status="Approved" class="text-decoration-none text-reset">
+            <div class="card stat-card stat-approved h-100"><div class="card-body">
+                <div class="stat-label">Approved</div>
+                <div class="stat-value" data-stat="approved">@Model.ApprovedApplications</div>
+            </div></div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a asp-controller="Applications" asp-action="Index" asp-route-status="Rejected" class="text-decoration-none text-reset">
+            <div class="card stat-card stat-rejected h-100"><div class="card-body">
+                <div class="stat-label">Rejected</div>
+                <div class="stat-value" data-stat="rejected">@Model.RejectedApplications</div>
+            </div></div>
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>Recently submitted</strong>
+        <span class="text-muted small"><span data-stat="customers">@Model.TotalCustomers</span> customers registered</span>
+    </div>
+    @if (Model.RecentApplications.Count == 0)
+    {
+        <div class="card-body text-muted">No applications yet. <a asp-controller="Applications" asp-action="Create">Submit the first one</a>.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr><th>Number</th><th>Customer</th><th>Project</th><th>Submitted</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var app in Model.RecentApplications)
+                    {
+                        <tr>
+                            <td><a asp-controller="Applications" asp-action="Details" asp-route-id="@app.Id">@app.ApplicationNumber</a></td>
+                            <td>@app.Customer?.FullName</td>
+                            <td>@app.ProjectName</td>
+                            <td>@app.SubmissionDate.ToLocalTime().ToString("d")</td>
+                            <td><partial name="_StatusBadge" model="app.Status" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>

@@ -1,19 +1,32 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using BuildSure.Web.Models;
+using BuildSure.Web.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BuildSure.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(IApplicationService applicationService) : Controller
 {
-    public IActionResult Index()
+    // GET /  (or /Home/Index) - the dashboard
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var dashboard = await applicationService.GetDashboardAsync();
+        return View(dashboard); // strongly typed: Views/Home/Index.cshtml has @model DashboardViewModel
     }
 
-    public IActionResult Privacy()
+    // GET /Home/Stats - JSON used by the dashboard's "Refresh" button (jQuery AJAX)
+    [HttpGet]
+    public async Task<IActionResult> Stats()
     {
-        return View();
+        var d = await applicationService.GetDashboardAsync();
+        return Json(new
+        {
+            total = d.TotalApplications,
+            pending = d.PendingApplications,
+            approved = d.ApprovedApplications,
+            rejected = d.RejectedApplications,
+            customers = d.TotalCustomers
+        });
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

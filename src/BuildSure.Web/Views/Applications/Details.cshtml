@@ -1,0 +1,106 @@
+@model InsuranceApplication
+@{
+    ViewData["Title"] = Model.ApplicationNumber;
+    bool isPending = Model.Status == ApplicationStatus.Pending;
+}
+
+<div class="page-header">
+    <div>
+        <a asp-action="Index" class="small text-decoration-none">&larr; Applications</a>
+        <h1>@Model.ApplicationNumber <partial name="_StatusBadge" model="Model.Status" /></h1>
+    </div>
+    <div class="d-flex gap-2">
+        @if (isPending)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary js-pending-only">Edit</a>
+        }
+        @if (Model.Status != ApplicationStatus.Approved)
+        {
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="js-confirm js-not-approved"
+                  data-confirm="Delete application @Model.ApplicationNumber? This cannot be undone.">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        }
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="card h-100">
+            <div class="card-header bg-white"><strong>Project</strong></div>
+            <div class="card-body">
+                <dl class="row details mb-0">
+                    <dt class="col-sm-4">Customer</dt>
+                    <dd class="col-sm-8"><a asp-controller="Customers" asp-action="Details" asp-route-id="@Model.CustomerId">@Model.Customer?.FullName</a> <span class="text-muted">(@Model.Customer?.NationalId)</span></dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.ProjectName)</dt>
+                    <dd class="col-sm-8">@Model.ProjectName</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.ProjectAddress)</dt>
+                    <dd class="col-sm-8">@Model.ProjectAddress</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.NumberOfFloors)</dt>
+                    <dd class="col-sm-8">@Model.NumberOfFloors</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.ConstructionCost)</dt>
+                    <dd class="col-sm-8">@Model.ConstructionCost.ToString("N2")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.SubmissionDate)</dt>
+                    <dd class="col-sm-8">@Model.SubmissionDate.ToLocalTime().ToString("g")</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Notes)</dt>
+                    <dd class="col-sm-8 mb-0" style="white-space: pre-line">@(string.IsNullOrWhiteSpace(Model.Notes) ? "-" : Model.Notes)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card mb-3">
+            <div class="card-header bg-white"><strong>Review</strong></div>
+            <div class="card-body">
+                <dl class="row details mb-0">
+                    <dt class="col-sm-5">Status</dt>
+                    <dd class="col-sm-7"><partial name="_StatusBadge" model="Model.Status" /></dd>
+
+                    <dt class="col-sm-5">@Html.DisplayNameFor(m => m.ReviewedAt)</dt>
+                    <dd class="col-sm-7" id="reviewed-at">@(Model.ReviewedAt?.ToLocalTime().ToString("g") ?? "-")</dd>
+
+                    <dt class="col-sm-5">@Html.DisplayNameFor(m => m.ReviewNote)</dt>
+                    <dd class="col-sm-7" id="review-note">@(Model.ReviewNote ?? "-")</dd>
+                </dl>
+                <div id="certificate-row" class="alert alert-success mt-3 mb-0 @(Model.CertificateNumber is null ? "d-none" : "")">
+                    <div class="small">Simulated insurance certificate</div>
+                    <div class="certificate" id="certificate-number">@Model.CertificateNumber</div>
+                </div>
+            </div>
+        </div>
+
+        @if (isPending)
+        {
+            @* Workflow steps 3-4: an employee reviews and approves or rejects.
+               Each form works as a normal POST, and site.js upgrades it to AJAX (class js-review). *@
+            <div class="card" id="review-panel">
+                <div class="card-header bg-white"><strong>Employee decision</strong></div>
+                <div class="card-body">
+                    <form asp-action="Approve" asp-route-id="@Model.Id" method="post" class="js-review js-confirm mb-4"
+                          data-confirm="Approve @Model.ApplicationNumber and issue a simulated certificate?"
+                          data-confirm-button="Approve" data-confirm-class="btn-success">
+                        <label for="reviewNote" class="form-label">Approval note (optional)</label>
+                        <input type="text" id="reviewNote" name="reviewNote" class="form-control mb-2" maxlength="500" />
+                        <button type="submit" class="btn btn-success w-100">Approve</button>
+                    </form>
+
+                    <form asp-action="Reject" asp-route-id="@Model.Id" method="post" class="js-review js-confirm"
+                          data-require-reason="true"
+                          data-confirm="Reject @Model.ApplicationNumber?" data-confirm-button="Reject">
+                        <label for="reason" class="form-label">Rejection reason (required)</label>
+                        <textarea id="reason" name="reason" class="form-control mb-2" rows="2" maxlength="500" required></textarea>
+                        <div class="invalid-feedback mb-2">Please enter a reason.</div>
+                        <button type="submit" class="btn btn-outline-danger w-100">Reject</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>

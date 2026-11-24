@@ -1,0 +1,42 @@
+@model IReadOnlyList<InsuranceApplication>
+@* Partial view: rendered inside Index.cshtml on first load, and returned ALONE by the
+   controller when jQuery asks for it (AJAX filter). *@
+<div class="card">
+    @if (Model.Count == 0)
+    {
+        <div class="card-body text-muted">No applications match your filter.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Customer</th>
+                        <th>Project</th>
+                        <th class="text-center">Floors</th>
+                        <th class="text-end">Cost</th>
+                        <th>Submitted</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var app in Model)
+                    {
+                        <tr>
+                            <td><a asp-controller="Applications" asp-action="Details" asp-route-id="@app.Id">@app.ApplicationNumber</a></td>
+                            <td><a asp-controller="Customers" asp-action="Details" asp-route-id="@app.CustomerId" class="text-reset">@app.Customer?.FullName</a></td>
+                            <td>@app.ProjectName</td>
+                            <td class="text-center">@app.NumberOfFloors</td>
+                            <td class="text-end">@app.ConstructionCost.ToString("N0")</td>
+                            <td>@app.SubmissionDate.ToLocalTime().ToString("d")</td>
+                            <td><partial name="_StatusBadge" model="app.Status" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer bg-white text-muted small">@Model.Count application(s)</div>
+    }
+</div>

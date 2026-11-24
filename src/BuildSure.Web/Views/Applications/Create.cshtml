@@ -1,0 +1,25 @@
+@model ApplicationFormViewModel
+@{
+    ViewData["Title"] = "New application";
+}
+
+<div class="page-header">
+    <div>
+        <h1>New insurance application</h1>
+        <div class="text-muted small">The application number and submission date are generated automatically. New applications start as <strong>Pending</strong>.</div>
+    </div>
+</div>
+
+<div class="card"><div class="card-body">
+    <form asp-action="Create" method="post">
+        <partial name="_ApplicationForm" model="Model" />
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Submit application</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div></div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

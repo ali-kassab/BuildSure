@@ -1,0 +1,85 @@
+@model ReportsViewModel
+@{
+    ViewData["Title"] = "SQL Reports";
+}
+
+<div class="page-header">
+    <div>
+        <h1>SQL reports</h1>
+        <div class="text-muted small">Data read from a SQL Server <strong>VIEW</strong> and a <strong>STORED PROCEDURE</strong> instead of LINQ over tables.</div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-white">
+        <strong>Applications per customer</strong>
+        <span class="text-muted small">&middot; source: <code>dbo.vw_CustomerApplicationSummary</code> (view)</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Customer</th><th>National ID</th>
+                    <th class="text-center">Total</th><th class="text-center">Pending</th>
+                    <th class="text-center">Approved</th><th class="text-center">Rejected</th>
+                    <th class="text-end">Total cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.CustomerSummaries)
+                {
+                    <tr>
+                        <td><a asp-controller="Customers" asp-action="Details" asp-route-id="@row.CustomerId">@row.FullName</a></td>
+                        <td>@row.NationalId</td>
+                        <td class="text-center">@row.TotalApplications</td>
+                        <td class="text-center">@row.PendingCount</td>
+                        <td class="text-center">@row.ApprovedCount</td>
+                        <td class="text-center">@row.RejectedCount</td>
+                        <td class="text-end">@row.TotalConstructionCost.ToString("N0")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-white d-flex flex-wrap gap-2 justify-content-between align-items-center">
+        <div>
+            <strong>Applications by status</strong>
+            <span class="text-muted small">&middot; source: <code>EXEC dbo.usp_GetApplicationsByStatus @@Status</code> (stored procedure)</span>
+        </div>
+        <form asp-action="Index" method="get" class="d-flex gap-2">
+            <select asp-for="Status" name="status" asp-items="StatusStyles.StatusOptions()" class="form-select form-select-sm"
+                    onchange="this.form.submit()">
+                <option value="">All statuses</option>
+            </select>
+            <noscript><button type="submit" class="btn btn-sm btn-outline-secondary">Go</button></noscript>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr><th>Number</th><th>Customer</th><th>Project</th><th class="text-center">Floors</th><th class="text-end">Cost</th><th>Status</th><th>Certificate</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.Applications)
+                {
+                    <tr>
+                        <td>@row.ApplicationNumber</td>
+                        <td>@row.CustomerName</td>
+                        <td>@row.ProjectName</td>
+                        <td class="text-center">@row.NumberOfFloors</td>
+                        <td class="text-end">@row.ConstructionCost.ToString("N0")</td>
+                        <td>@row.Status</td>
+                        <td class="certificate small">@row.CertificateNumber</td>
+                    </tr>
+                }
+                @if (Model.Applications.Count == 0)
+                {
+                    <tr><td colspan="7" class="text-muted">No rows returned.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

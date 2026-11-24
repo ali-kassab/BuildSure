@@ -1,0 +1,26 @@
+@model ApplicationFormViewModel
+@{
+    ViewData["Title"] = "Edit application";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Edit application</h1>
+        <div class="text-muted small">@Model.ApplicationNumber &middot; only pending applications can be edited.</div>
+    </div>
+</div>
+
+<div class="card"><div class="card-body">
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <input type="hidden" asp-for="ApplicationNumber" />
+        <partial name="_ApplicationForm" model="Model" />
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div></div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
