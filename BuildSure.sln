@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demos", "demos", "{FA8A28C8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildSure.WinForms", "demos\BuildSure.WinForms\BuildSure.WinForms.csproj", "{12D31FB7-B7A5-4980-AAA1-FF7103D6936D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildSure.WebForms", "demos\BuildSure.WebForms\BuildSure.WebForms.csproj", "{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,12 @@ Global
 		{12D31FB7-B7A5-4980-AAA1-FF7103D6936D}.Release|x64.Build.0 = Release|Any CPU
 		{12D31FB7-B7A5-4980-AAA1-FF7103D6936D}.Release|x86.ActiveCfg = Release|Any CPU
 		{12D31FB7-B7A5-4980-AAA1-FF7103D6936D}.Release|x86.Build.0 = Release|Any CPU
+		{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40}.Release|x64.ActiveCfg = Release|Any CPU
+		{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +77,6 @@ Global
 		{3B5DC3A9-2C24-4D83-B0C0-9793DC4E941C} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{1D542633-096B-4F4E-AC2B-19774C4B3F66} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{12D31FB7-B7A5-4980-AAA1-FF7103D6936D} = {FA8A28C8-4B59-8028-2ACF-626D05B08DB7}
+		{6C1B5E2A-4F7D-4E1B-9C3A-2B8D7E5F1A40} = {FA8A28C8-4B59-8028-2ACF-626D05B08DB7}
 	EndGlobalSection
 EndGlobal

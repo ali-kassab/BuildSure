@@ -7,10 +7,10 @@
 | `src/BuildSure.Web` | ASP.NET Core MVC | `net10.0` | `dotnet build` (in `BuildSure.sln`) |
 | `tests/BuildSure.Tests` | xUnit | `net10.0` | `dotnet test` (in `BuildSure.sln`) |
 | `demos/BuildSure.WinForms` | Windows Forms | `net10.0-windows` | `dotnet build` (in `BuildSure.sln`) |
-| `demos/BuildSure.WebForms` | ASP.NET Web Forms (classic csproj) | .NET Framework 4.8 | Visual Studio MSBuild, **not** in `BuildSure.sln` |
+| `demos/BuildSure.WebForms` | ASP.NET Web Forms (classic csproj) | .NET Framework 4.8 | Visual Studio MSBuild on its own `.csproj` (listed in `BuildSure.sln`, excluded from its build) |
 
-The Web Forms project is deliberately left out of the solution, so that `dotnet build BuildSure.sln`
-works on machines without the .NET Framework web targets.
+The Web Forms project is listed in the solution, but it has no `Build.0` entries (only `ActiveCfg`), so
+`dotnet build BuildSure.sln` skips it and still works on machines without the .NET Framework web targets.
 
 The three demo/legacy projects are independent. They share only the **database** with the MVC app.
 
@@ -118,7 +118,7 @@ erDiagram
 | Application number `APP-yyyyMMdd-XXXXXX` (6 hex characters from a GUID) + unique index | Simple and readable. A collision would surface as a DB error (very unlikely) |
 | jQuery progressive enhancement | Every AJAX feature has a non-JS fallback (form post / GET) |
 | Tests use EF Core InMemory | Fast, no SQL Server needed. FKs and raw SQL are not covered (see limitations) |
-| Web Forms outside the solution | `dotnet` CLI can't build classic web projects |
+| Web Forms in the solution but excluded from its build | Visible in Solution Explorer; the `dotnet` CLI can't build classic web projects |
 
 ## 6. Cross-cutting
 

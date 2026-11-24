@@ -25,3 +25,7 @@ All meaningful changes, oldest first. Dates are 2026-11-24 (local time) unless s
   and `CLAUDE.md` (read-the-handoff rule). Ignored the machine-specific `.claude/launch.json`. Created the public
   GitHub repository https://github.com/ali-kassab/BuildSure and pushed `main` (`6d8b703`).
 - **Handoff update**: recorded the repository URL, pushed hash and verification results in `SESSION_HANDOFF.md`.
+- **Demo re-verification + solution structure**: re-built and re-ran both demos (Web Forms under IIS Express with
+  scripted PostBacks; WinForms through UI Automation, now including DataGridView cell values). Added
+  `BuildSure.WebForms` to `BuildSure.sln` under `demos`, excluded from the solution build so `dotnet build` still works.
+  Updated README, architecture and handoff docs. No application code changed.

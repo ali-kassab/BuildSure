@@ -2,7 +2,54 @@
 
 > Read [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md) first, then this file.
 
-## Latest session: 2026-11-24 (initial build + GitHub publication)
+## Latest session: 2026-11-24 (Web Forms / WinForms demo re-verification)
+
+### Context
+
+The owner asked for the two remaining demos (Web Forms on .NET Framework, Windows Forms) to be built. They already
+existed from the previous session (`7b43fd4`, `4d43114`). This session re-verified them in the current environment
+and fixed the one structural gap: Web Forms was not in `BuildSure.sln`. **No application code was changed**; the MVC
+app is untouched.
+
+### Environment checked
+
+- .NET SDKs 9.0.318 / 10.0.204 / 10.0.401. .NET Framework 4.8 runtime (release 533509) and the 4.8 targeting pack.
+- VS 2022 Community MSBuild (with WebApplication targets), IIS Express, LocalDB `MSSQLLocalDB` v17, `sqlcmd`.
+- VS 2026 ("18") Community is installed **without** MSBuild. Python isn't installed.
+
+### Done
+
+1. `BuildSure.sln`: added `demos\BuildSure.WebForms\BuildSure.WebForms.csproj` (GUID `{6C1B5E2A-…1A40}`) under the
+   `demos` folder, with `ActiveCfg` entries only (no `Build.0`). `dotnet build` therefore skips it.
+2. Docs: README (structure + Web Forms section), `docs/architecture.md`, `PROJECT_HANDOFF.md` (§3, §5, §8), `CHANGELOG.md`.
+
+### Files changed
+
+`BuildSure.sln`, `README.md`, `docs/architecture.md`, `docs/handoff/PROJECT_HANDOFF.md`,
+`docs/handoff/SESSION_HANDOFF.md`, `docs/handoff/CHANGELOG.md`.
+
+### Verification (actually run this session)
+
+| Check | Result |
+|---|---|
+| `dotnet build BuildSure.sln` (before and after the sln change) | Succeeded, 0 warnings, 0 errors |
+| `dotnet sln list` | 4 projects, including `BuildSure.WebForms` |
+| `dotnet test` | Passed 11 / 11 |
+| VS 2022 MSBuild `BuildSure.WebForms.csproj -restore` | Exit code 0 |
+| VS 2022 MSBuild on the whole `BuildSure.sln` | **Fails** (NETSDK1045: it resolves SDK 9 and can't target .NET 10). Expected; documented in PROJECT_HANDOFF §8 |
+| Web Forms under IIS Express, port 5310 (scripted HTTP GET/POST with `__VIEWSTATE` / `__EVENTVALIDATION`) | First GET: `IsPostBack = false`, 4 rows. Search "Omar": `IsPostBack = true`, 2 rows. Status "Approved": 2 rows (matches `SELECT COUNT(*) … WHERE Status='Approved'` = 2). Counter after 2 clicks = 2. "Set both labels" set both labels; after a plain PostBack the ViewState label kept its value, the non-ViewState label went back to "(not set)", the counter stayed 2, and the GridView kept its rows without a DB query |
+| WinForms (UI Automation) | Window title correct. Load: "4 application(s) found." Search "Omar" via Button Invoke: "2 application(s) found." DataGridView cell values read through `ValuePattern` (e.g. `APP-SEED-0002 | Omar Haddad | Hamra Office Block | 12 | 5,750,000 | Pending`) |
+
+### Unresolved
+
+- Same as the previous session: no auth (by design), IIS untested, no SQL Server integration tests.
+- No automated tests for either demo; their checks above were scripted by hand, not committed.
+
+### Next steps
+
+Same as the list in the previous session below. Expect 11 passing tests and 4 projects in `dotnet sln list`.
+
+## Previous session: 2026-11-24 (initial build + GitHub publication)
 
 ### Completed
 

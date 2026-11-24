@@ -37,7 +37,7 @@ The repository also has a small legacy **ASP.NET Web Forms** demo, a **Windows F
 
 ```
 BuildSure/
-├── BuildSure.sln                      # MVC app + tests + WinForms (Web Forms is built separately)
+├── BuildSure.sln                      # MVC app + tests + WinForms + Web Forms (Web Forms is listed but built separately)
 ├── src/BuildSure.Web/                 # ★ the main ASP.NET Core MVC application
 │   ├── Program.cs                     # DI registrations + middleware pipeline (start here)
 │   ├── appsettings*.json              # connection string, startup migration flag, logging
@@ -165,7 +165,9 @@ can run them repeatedly without changing your data.
 ## Legacy Web Forms demo (`demos/BuildSure.WebForms`)
 
 This is a .NET Framework 4.8 project, so build it with Visual Studio or Visual Studio's MSBuild.
-`dotnet build` won't work.
+`dotnet build` won't work. It is listed in `BuildSure.sln` (under `demos`) so you can see it in Solution
+Explorer, but its "Build" box is unticked in every solution configuration. That way `dotnet build BuildSure.sln`
+skips it instead of failing. Build it on its own, as shown below.
 
 - **Visual Studio:** File → Open → Project → `BuildSure.WebForms.csproj`, then press F5. It runs on IIS Express at http://localhost:5310.
 - **Command line:**

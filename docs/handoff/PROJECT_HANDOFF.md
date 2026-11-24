@@ -44,7 +44,8 @@ See [../architecture.md](../architecture.md) for diagrams and decisions. In shor
   Customers and Reports controllers use the DbContext directly. There is no repository layer.
 - Bootstrap 5 and jQuery 3 (bundled by the MVC template in `wwwroot/lib`), jQuery Validation Unobtrusive.
 - Tests: xUnit and the EF Core InMemory provider.
-- Web Forms: .NET Framework 4.8 classic web project, built with VS 2022 MSBuild, run with IIS Express.
+- Web Forms: .NET Framework 4.8 classic web project, built with VS 2022 MSBuild, run with IIS Express. It is listed in
+  `BuildSure.sln` but excluded from the solution build (no `Build.0` entries), so `dotnet build BuildSure.sln` skips it.
 - WinForms: .NET 10 Windows, Microsoft.Data.SqlClient (ADO.NET).
 
 ## 4. Implemented features (all verified, see SESSION_HANDOFF for how)
@@ -67,7 +68,7 @@ See [../architecture.md](../architecture.md) for diagrams and decisions. In shor
 
 ```
 BuildSure/
-├── BuildSure.sln
+├── BuildSure.sln        Web, Tests, WinForms (built) + WebForms (listed, not built by the sln)
 ├── README.md, project-overview.md, CLAUDE.md
 ├── src/BuildSure.Web/   Program.cs, appsettings*.json, Models/, Data/(DbContext, DbSeeder, Migrations/),
 │                        Services/, ViewModels/, Controllers/, Views/, wwwroot/(css, js/site.js, lib/)
@@ -106,7 +107,11 @@ won't have them until `database/01` and `database/03` are run.
 - **No authentication or authorisation.** Any user can approve or reject.
 - **IIS deployment not tested.** IIS isn't installed on the dev machine. `dotnet publish` and running the published output in Production were tested.
 - Unit tests use the InMemory provider. They don't exercise SQL Server FKs, unique indexes, the view or the SP; those were verified manually in the browser and with sqlcmd.
-- WinForms was verified through Windows UI Automation: the status label showed the row counts. The grid isn't exposed as a UIA table, so cell contents weren't read programmatically.
+- WinForms was verified through Windows UI Automation: the status label row counts, and the DataGridView cell values
+  (read through the cells' UIA `ValuePattern`). There are no automated WinForms or Web Forms tests in `dotnet test`.
+- VS 2022 MSBuild can't build the whole `BuildSure.sln`, because it resolves the .NET 9 SDK and the other projects target
+  .NET 10. Use `dotnet build` for the solution and VS 2022 MSBuild for `BuildSure.WebForms.csproj` alone. The VS 2026 ("18")
+  Community install on the dev machine has no MSBuild component.
 - The application-number suffix is random (6 hex characters). A collision would raise a unique-index error and isn't retried.
 - LocalDB doesn't work under IIS; a server deployment needs SQL Server.
 - Razor views are compiled at build time, so view changes need an app restart (no runtime compilation package).
