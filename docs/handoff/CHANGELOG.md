@@ -23,4 +23,5 @@ All meaningful changes, oldest first. Dates are 2026-11-24 (local time) unless s
 - **Docs** (`0bfa654`): `README.md`, `docs/LEARNING_GUIDE.md`, `docs/IIS_DEPLOYMENT.md`.
 - **Handoff and GitHub**: added `project-overview.md`, `docs/architecture.md`, `docs/handoff/*`,
   and `CLAUDE.md` (read-the-handoff rule). Ignored the machine-specific `.claude/launch.json`. Created the public
-  GitHub repository and pushed `main`. The commit hashes and URL are in `SESSION_HANDOFF.md`.
+  GitHub repository https://github.com/ali-kassab/BuildSure and pushed `main` (`6d8b703`).
+- **Handoff update**: recorded the repository URL, pushed hash and verification results in `SESSION_HANDOFF.md`.

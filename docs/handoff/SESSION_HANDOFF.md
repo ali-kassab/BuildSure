@@ -107,4 +107,16 @@ Unit tests run:
 
 ## Publication record
 
-_Filled in after the push. See the next section._
+| Item | Value (verified 2026-11-24) |
+|---|---|
+| Repository | https://github.com/ali-kassab/BuildSure |
+| Visibility / default branch | Public / `main` (checked with `gh repo view`) |
+| Pushed by | GitHub CLI account `ali-kassab` (`gh auth status`) |
+| First push: last commit | `6d8b7033f8ee4ed6e159484bbfa6c037e8ffa3c3` ("Add handoff docs, architecture, project overview and session rules") |
+| Remote matches local | `git rev-parse main` = `git rev-parse origin/main` = `git ls-remote origin refs/heads/main` = `6d8b703…`. The GitHub API shows 8 commits on `main`, attributed to `ali-kassab` |
+| Working tree after push | Clean (`git status`) |
+| Pre-push secret scan | `git grep` over tracked files and `git log -p --all` for passwords, user ids, API keys, tokens, private keys and cloud keys. Only placeholder text in docs matched. Connection strings use Windows integrated auth (no credentials). No bin/obj, database files, `.env`, `.user` or publish output tracked |
+
+This file was then updated with the table above and pushed as one more commit, "Record GitHub publication
+details in session handoff". That commit is the current `main` head. Use `git log -1` to get its hash. It can't
+contain its own hash.
