@@ -209,6 +209,13 @@ Then install the ASP.NET Core **Hosting Bundle**, create a site whose app pool i
 important click (Browser → Controller → Model Binding → Validation → Service → DbContext →
 SQL Server → Redirect/View). It also compares each piece to Express and Spring Boot.
 
+## More documentation
+
+- [project-overview.md](project-overview.md): a one-page summary
+- [docs/architecture.md](docs/architecture.md): layers, data model, workflow, design decisions
+- [docs/handoff/PROJECT_HANDOFF.md](docs/handoff/PROJECT_HANDOFF.md) and [SESSION_HANDOFF.md](docs/handoff/SESSION_HANDOFF.md): read these first when continuing the work
+- [docs/handoff/CHANGELOG.md](docs/handoff/CHANGELOG.md)
+
 ## Known limitations
 
 - **No authentication or roles.** Anyone using the app acts as the "employee". Adding ASP.NET Core
